@@ -130,6 +130,10 @@ ALLOWED_HOSTS = ['*']
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
+# for profile_pic #strictly in develepment mode only
+MEDIA_URL='/media/'
+MEDIA_ROOT=os.path.join(BASE_DIR,'polls/media')
+
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = [
@@ -139,3 +143,11 @@ STATICFILES_DIRS = [
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+LOGIN_REDIRECT_URL='/polls/posts/'
+
+#for gmail
+EMAIL_USE_TLS=True
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_HOST_USER='testforselftest@gmail.com'
+EMAIL_HOST_PASSWORD='testing@123'
+EMAIL_PORT=587

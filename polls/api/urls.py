@@ -6,6 +6,7 @@ from .views import(
     PostListAPIView,
     UserLoginAPIView,
     PostUpdateAPIView,
+    EmailSendingAPIView,
 
     )
 
@@ -17,7 +18,7 @@ urlpatterns = [
     #url(r'^profile/', views.profile, name='profile'),
     #url(r'^edit_profile/', views.edit_profile, name='profile'),
     #url(r'^update_profile/', views.update_profile, name='update_profile'),
-    #url(r'^forgot/', views.forgot_password, name='forgot'),
+    url(r'^forgot/',EmailSendingAPIView.as_view() , name='forgot'),
     #url(r'^to_mail/', views. verification_code_to_mail, name='forgot'),
 
     #end here#
