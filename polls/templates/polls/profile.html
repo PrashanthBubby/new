@@ -1,0 +1,17 @@
+{%extends "polls/blog.html"%}
+
+{% block content%}
+<li style="color:black " ><a href="/polls/edit_profile">Edit Profile</a></li><br>
+<b>First Name:</b>{{user.first_name}}<hr>
+<b>Last Name:</b>{{user.last_name}}<hr>
+<b>School:</b>{{user.userprofile.school}}<hr>
+<b>College:</b>{{user.userprofile.college}}<hr>
+<b>Highlight:</b>{{user.userprofile.highlight}}<hr>
+<b>Subjects:</b>{{user.userprofile.subjects}}<hr>
+<b>Stream:</b>{{user.userprofile.stream}}<hr>
+<b>Mobile Number:</b>{{user.userprofile.phone}}<hr>
+<b>Projects:</b>{{user.userprofile.projects}}<hr>
+<b>Internship:</b>{{user.userprofile.internship}}<hr>
+<b>Hobbies:</b>{{user.userprofile.hobbies}}<hr>
+
+{% endblock %}

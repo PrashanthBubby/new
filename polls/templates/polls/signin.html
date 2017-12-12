@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<HTML>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<HEAD><TITLE>Login Page</TITLE>
+<style>
+.one {
+    border: 2px solid black;
+    border-radius: 5px;
+	width:40%;
+	height:auto;
+	position:fixed;
+	left:50%;
+	top:20%;
+	bottom:20%;
+
+	}
+.two {
+     background-color: rgb(243, 241, 244);
+	
+	}
+.tytl{
+     float:left;
+	 width:40%;
+	 margin-top:15vh;
+	 margin:0 px;
+	 text-align:center;
+	 height:auto;
+	  font-family: "Georgia", Times, serif;
+	  font-size:5vw;
+     }
+</style>
+
+</HEAD>
+<BODY class="two">{% csrf_token %}
+<div class="tytl">
+<h1>Being Bro:)</h1>
+</div>
+<CENTER>
+
+<div class="one">
+<FORM method="GET" action="/polls/signup/">{% csrf_token %}
+<p>Have no account?</p>
+<input type="submit" value="SIGN UP">
+
+</FORM>
+<br>
+<FORM method="POST">
+{% csrf_token %}
+{{form.as_p}}
+<input type="submit" value="Signin">
+<br>
+<br>
+<a href="/polls/forgot/">Forgot password </a>
+<br>
+</FORM>
+</div>
+
+</CENTER>
+
+
+
+</BODY>
+</HTML>

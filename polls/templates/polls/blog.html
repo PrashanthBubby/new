@@ -1,0 +1,135 @@
+<html>
+<head>
+<style>
+body{
+background:rgb(243, 241, 244);
+}
+
+.first{
+background:rgb(253, 254, 253);
+width:100%;
+height:auto;
+position:fixed;
+top:0px;
+left:0px;
+
+}
+.options
+{
+position:fixed;
+height:100%;
+background:white;
+min-width:80px;
+width:10%;
+float:left;
+top:12%;
+}
+.lists
+{
+list-style-type:none;
+list-style-margin-left:15px;
+
+}
+.middle{
+     float:center;
+	 height:100%;
+	 position:fixed;
+	 top:20%;
+	 left:13%;
+	 overflow:scroll;
+	 width:100%;
+
+  }
+.create_post
+{
+width=100%;
+height=10px;
+background-color:rgb(100,100,100);
+font-size:200%;
+color:black;
+}
+a:link {
+    text-decoration: none;
+	color:rgb(150,150,150);
+}
+
+a:visited {
+    text-decoration: none;
+		color:rgb(150,150,150);
+}
+
+a:hover {
+    text-decoration: underline;
+		color:rgb(50,150,150);
+}
+
+a:active {
+    text-decoration: underline;
+		color:rgb(150,150,150);
+}
+.create_post_div
+{
+display:block;
+margin-left:1%%
+<!-- position:fixed;
+	 left:40%;
+	 top:40%;
+}
+-->
+.create_post_div_postarea
+{
+width=360px;
+min-width:360px;
+max-width: 360px;
+ height: 180px;
+ min-height:180px; 
+max-height:180px; 
+ z-index: auto;
+ position: relative; 
+ line-height: 17.1429px;
+ font-size: 12px; 
+ transition: none;
+ background: transparent !important;
+}
+<!--.submit_post_link
+{
+padding: 14px 25px;
+    color:red;
+	margin:10%;
+	text-align: center;
+    text-decoration: none;
+    background-color:black;
+    }
+-->
+.logged_in_as
+{
+font-family:Courier New;
+font-size:200%;
+font-variant:small-caps;
+color:red;
+}
+</style>
+</head>
+<body>{% csrf_token %}
+<div align="center" class="first">
+<br>
+<p>HELLO WELCOME TO BEING BRO </p>
+<p>logged in as:{{user}}</p>
+</div>
+<div class="options" align="left">
+<list class="lists">
+<br>
+<li style="margin-left:15% " ><a href="/polls/posts">Posts ...</a></li>
+<br><li style="margin-left:15%"><a href="/polls/profile">Profile...</a></li>
+<br><li style="margin-left:15%"><a href="/polls/followers/">Followers</a></li>
+<br><li style="margin-left:15%"><a href="/polls/messages">Messages</a></li>
+<br><li style="margin-left:15%"><a href="/polls/tags">Tags</a></li>
+
+</list>
+</div>
+<div class="middle">
+{% block content%}
+{% endblock %}
+
+</div>
+</html>

@@ -1,0 +1,21 @@
+{%extends "polls/blog.html"%}
+{% block content%}
+
+<form action="/polls/submit_post/" method="POST" >
+{% csrf_token %}
+<br>
+<div class="create_post_div">
+<label for="pst_title">Title:</label>
+<input  id="pst_title" type="text" name="title" autofocus><br><br>
+<label for="post">Post:</label>
+<br>
+<br>
+<textarea class="create_post_div_postarea" id="post" name="post" placeholder="Enter your post here . . . . ">
+</textarea>
+<br>
+<br>
+<div>
+<input type="submit" value="Post" style="margin-left:10%">
+</div>
+</div>
+{%endblock%}

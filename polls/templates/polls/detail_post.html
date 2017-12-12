@@ -1,0 +1,15 @@
+{%extends "polls/blog.html"%}
+{% block content%}
+<div style="margin-left:1%">
+<list>
+<div class="create_post">
+<a href="/polls/create_post">Create post</a>
+</div> 
+<p style="text-transform: capitalize">posted by: {{object.username}}</p>
+<h1>{{object.title|safe}}</h1>
+<p>Posted On:{{object.date}}</p>
+
+<hr>
+</list>
+</div>
+{% endblock %}

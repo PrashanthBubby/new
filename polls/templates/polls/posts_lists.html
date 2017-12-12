@@ -1,0 +1,16 @@
+{%extends "polls/blog.html"%}
+{% block content%}
+<list>
+<div class="create_post">
+<a href="/polls/create_post">Create post</a>
+</div>
+
+{%for post in object_list %} 
+<p style="text-transform: capitalize">posted by: {{post.username}}</p>
+<h1><a href="/polls/{{post.id}}">{{post.title}}</a></h1>
+<p>Posted On:{{post.date}}</p>
+<h3>{{post.post}}</h3>
+<hr>
+{%endfor%}
+</list>
+{% endblock %}

@@ -1,0 +1,44 @@
+{%extends "polls/blog.html"%}
+{% block content%}
+<form method="post" action="/polls/update_profile/">
+{% csrf_token %}
+<p>Hello <span style="color:red;text-transform:capitalize ">{{user.username}}!!</span> Update Your Profile and stay up-to date :)</p>
+<hr>
+<label for="firstname">First Name:</label>
+<input id="firstname" type="text" name="firstname" value="{{user.first_name}}"><hr>
+
+<label for="lastname">Last Name:</label>
+<input id="lastname" type="text" name="lastname" value="{{user.last_name}}" ><hr>
+
+<label for="school">School:</label>
+<input id="school" type="text" name="school" value="{{user.userprofile.school}}" size="auto"><hr>
+
+<label for="college">College:</label>
+<input id="college" type="text" name="college" value="{{user.userprofile.college}}" size="auto"><hr>
+
+<label for="highlight">Highlight:</label>
+<input id="highlight" type="text" name="highlight" value="{{user.userprofile.highlight}}" size="auto"><hr>
+
+<label for="subjects">Subjects:</label>
+<input id="subjects" type="text" name="subjects" value="{{user.userprofile.subjects}}" size="auto"><hr>
+
+<label for="stream">Stream:</label>
+<input id="stream" type="text" name="stream" value="{{user.userprofile.stream}}" size="auto"><hr>
+
+<label for="projects">Projects:</label>
+<input id="projects" type="text" name="projects" value="{{user.userprofile.projects}}" size="auto"><hr>
+
+<label for="internship">Internship:</label>
+<input id="internship" type="text" name="internship" value="{{user.userprofile.internship}}" size="auto"><hr>
+
+
+
+<label for="phone">Phone no:</label>
+<input id="phone" type="number" name="phone" min="6666666666" max="10000000000" value="{{user.userprofile.phone}}"><hr>
+
+<input type="submit" value="UPDATE">
+
+</form>
+
+
+{% endblock %}
