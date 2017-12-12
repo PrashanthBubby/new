@@ -3,4 +3,4 @@ Django==1.11.1
 gunicorn==19.6.0
 psycopg2==2.6.2
 whitenoise==3.2
-djangorestframework==3.6.2Markdown==2.6.9django-filter==1.1.0
+djangorestframework==3.6.2
