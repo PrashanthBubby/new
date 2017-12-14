@@ -7,7 +7,8 @@ from .views import(
     UserLoginAPIView,
     PostUpdateAPIView,
     EmailSendingAPIView,
-
+    ProfileListAPIView,
+    ProfileEditAPIView,
     )
 
 urlpatterns = [
@@ -15,7 +16,8 @@ urlpatterns = [
     #url(r'^signup_form/', views.signup_cr, name='signup'),
     url(r'^login/', UserLoginAPIView.as_view(),name='login'),
     #url(r'^blog/', views.blog, name='blog'),
-    #url(r'^profile/', views.profile, name='profile'),
+    url(r'^profile/', ProfileListAPIView.as_view(), name='profile'),
+    url(r'^edit/', ProfileEditAPIView.as_view(), name='edit_profile'),
     #url(r'^edit_profile/', views.edit_profile, name='profile'),
     #url(r'^update_profile/', views.update_profile, name='update_profile'),
     url(r'^forgot/',EmailSendingAPIView.as_view() , name='forgot'),
