@@ -40,27 +40,29 @@ class PostCreateAPIView(CreateAPIView):
     #serializer_class=ProfileSerializer
 class ProfileListAPIView(ListAPIView):
     serializer_class=ProfileSerializer
-    def get(self, request):
-        permission_classes=[IsAuthenticated]
-        if request.user.is_authenticated():
-            serializer = ProfileSerializer(request.user.userprofile)
-            return Response(serializer.data)
-        else: return Response('not logged in.please login to view your profile')
-
+    def get_queryset(self):
+        user = self.request.user
+        queryset=UserProfile.objects.filter(name=user)
+        return queryset
 class ProfileEditAPIView(UpdateAPIView):
     serializer_class=ProfileSerializer
-    queryset=UserProfile.objects.all()
+    def get_queryset(self):
+        user = self.request.user
+        
+        queryset=UserProfile.objects.filter(name=user)
+        return queryset
     def update(self,request,*args,**kwargs):
-        instance=self.get_object()
-        instance.school=request.data.get("school")
-        return Response("done")
-    
-        instance.college=request.data.get("college")
-        instance.save()
-        serializer = self.get_serializer(instance)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response(serializer.data)
+        user = self.request.user
+        UserProfile.objects.filter(name=user).update(school='dishum',
+                                                     college='somecollege',
+                                                     highlight='some',
+                                                     subjects='sub',
+                                                     stream='stream',
+                                                     projects='proj',
+                                                     internship='intern',
+                                                     phone=9874562589
+                                                     )
+        return Response(x)
         
 class PostUpdateAPIView(ListAPIView):
     queryset=Posts.objects.all()
