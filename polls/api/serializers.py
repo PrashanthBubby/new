@@ -16,6 +16,15 @@ class PostSerializer(serializers.ModelSerializer):
             'post',
             'date',
             ]
+class PostCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Posts
+        fields=[
+            #'username',
+            'title',
+            'post',
+            #'date',
+            ]
 
 class UserProfileSerializer(serializers.ModelSerializer):
     #follows = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
@@ -49,35 +58,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             'internship',
             'phone',
             ]
-    def update(self,instance,validated_data):
-        user=instance.name
-        return instance
-        
-        user=UserProfile.objects.filter(Q(pk=1))
-        if user.exists() and user.count()==1:
-            for user in user:
-                image=data.get("image")
-                school=data.get("school")
-                college=data.get("college")
-                highlight=data.get("highlight")
-                subjects=data.get("subjects")
-                stream=data.get("stream")
-                projects=data.get("projects")
-                internship=data.get("internship")
-                phone=data.get("phone")
-                u=UserProfile.objects.get(pk=1)
-                
-                u.school=school
-                u.image=image
-                u.college=college
-                u.highlight=highlight
-                u.subjects=subjects
-                u.stream=stream
-                u.projects=projects
-                u.internship=internship
-                u.phone=phone
-                u.save()
-                return data
+
         
 class UserLoginSerializer(serializers.ModelSerializer):
     email=serializers.EmailField(label='Email Address',required=True,allow_blank=False)

@@ -9,13 +9,13 @@ from .views import(
     EmailSendingAPIView,
     ProfileListAPIView,
     ProfileEditAPIView,
+    PostCreateAPIView,
     )
 
 urlpatterns = [
     #url(r'^signup/', views.signup, name='signup'),
     #url(r'^signup_form/', views.signup_cr, name='signup'),
     url(r'^login/', UserLoginAPIView.as_view(),name='login'),
-    #url(r'^blog/', views.blog, name='blog'),
     url(r'^profile/', ProfileListAPIView.as_view(), name='profile'),
     url(r'^edit/', ProfileEditAPIView.as_view(), name='edit_profile'),
     #url(r'^edit_profile/', views.edit_profile, name='profile'),
@@ -24,7 +24,7 @@ urlpatterns = [
     #url(r'^to_mail/', views. verification_code_to_mail, name='forgot'),
 
     #end here#
-    
+    url(r'^create/',PostCreateAPIView.as_view(), name='lists'),
     url(r'^postsinapi/',PostListAPIView.as_view(), name='lists'),
     #url(r'^(?P<pk>\d+)$', views.DPostssss.as_view(), name='dposts'),
     #url(r'^followers/', views.followers, name='followers'),
