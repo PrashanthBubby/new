@@ -10,16 +10,17 @@ from .views import(
     ProfileListAPIView,
     ProfileEditAPIView,
     PostCreateAPIView,
+    ProfileUpdateAPIView
     )
 
 urlpatterns = [
     #url(r'^signup/', views.signup, name='signup'),
     #url(r'^signup_form/', views.signup_cr, name='signup'),
     url(r'^login/', UserLoginAPIView.as_view(),name='login'),
-    url(r'^profile/', ProfileListAPIView.as_view(), name='profile'),
+    url(r'^profile/$', ProfileListAPIView.as_view(), name='profile'),
     url(r'^edit/', ProfileEditAPIView.as_view(), name='edit_profile'),
     #url(r'^edit_profile/', views.edit_profile, name='profile'),
-    #url(r'^update_profile/', views.update_profile, name='update_profile'),
+    url(r'^(?P<pk>\d+)/edit/$',ProfileUpdateAPIView.as_view(), name='update_profile'),
     url(r'^forgot/',EmailSendingAPIView.as_view() , name='forgot'),
     #url(r'^to_mail/', views. verification_code_to_mail, name='forgot'),
 

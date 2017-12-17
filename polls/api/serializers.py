@@ -30,7 +30,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     #follows = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = User
-        fields = ('username','first_name','last_name')
+        fields = ('username',)
 class ProfileSerializer(serializers.ModelSerializer):
     name=UserProfileSerializer(required=False,read_only=True)
     image=serializers.ImageField(label='profile_pic',required=False)
@@ -47,8 +47,11 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model=UserProfile
         fields=[
+            'id',
             'name',
             'image',
+            'first_name',
+            'last_name',
             'school',
             'college',
             'highlight',

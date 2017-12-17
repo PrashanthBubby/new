@@ -1,8 +1,9 @@
 from rest_framework.generics import (ListAPIView,
                                      CreateAPIView,
- UpdateAPIView,
-RetrieveUpdateAPIView,
-)
+                                     UpdateAPIView,
+                                     RetrieveAPIView,
+                                     RetrieveUpdateAPIView,
+                                     )
 from polls.models import Posts,UserProfile
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny,IsAuthenticated
@@ -44,6 +45,21 @@ class ProfileListAPIView(ListAPIView):
         user = self.request.user
         queryset=UserProfile.objects.filter(name=user)
         return queryset
+class ProfileListAPIView(ListAPIView):
+    serializer_class=ProfileSerializer
+    def get_queryset(self):
+        user = self.request.user
+        queryset=UserProfile.objects.filter(name=user)
+        return queryset
+
+class ProfileUpdateAPIView(RetrieveUpdateAPIView):
+    serializer_class=ProfileSerializer
+    def get_queryset(self):
+        user = self.request.user
+        queryset=UserProfile.objects.filter(name=user)
+        return queryset
+
+
 class ProfileEditAPIView(UpdateAPIView):
     serializer_class=ProfileSerializer
     def get_queryset(self):
@@ -52,6 +68,8 @@ class ProfileEditAPIView(UpdateAPIView):
         queryset=UserProfile.objects.filter(name=user)
         return queryset
     def update(self,request,*args,**kwargs):
+        instance = self.get_object()
+        instance.school = request.data.get("school")
         user = self.request.user
         UserProfile.objects.filter(name=user).update(school='dishum',
                                                      college='somecollege',
@@ -62,7 +80,7 @@ class ProfileEditAPIView(UpdateAPIView):
                                                      internship='intern',
                                                      phone=9874562589
                                                      )
-        return Response(x)
+        return Response('done')
         
 class PostUpdateAPIView(ListAPIView):
     queryset=Posts.objects.all()

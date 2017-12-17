@@ -19,7 +19,7 @@ urlpatterns = [
     #end here#
     
     url(r'^posts/', views.Postssss.as_view(), name='posts'),
-    url(r'^(?P<pk>\d+)$', views.DPostssss.as_view(), name='dposts'),
+    url(r'^(?P<pk>\d+)/$', views.DPostssss.as_view(), name='dposts'),
     url(r'^followers/', views.followers, name='followers'),
     url(r'^messages/', views.followers, name='messages'),
     url(r'^tags/', views.followers, name='tags'),

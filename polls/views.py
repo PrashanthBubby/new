@@ -8,7 +8,8 @@ from .forms import Posts_Details, User_Signup, Update_Profile, Mail_to,Reset
 from django.views import generic
 from django.contrib.auth.models import User
 from django.urls import reverse
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 from django.core.mail import send_mail
 
@@ -30,12 +31,13 @@ def signup_cr(request):
 
 #def blog(request):
 #   return render(request,'polls/blog.html')
+@login_required(login_url='/polls/login/')
 def profile(request):
     return render(request,'polls/profile.html')
-
+@login_required(login_url='/polls/login/')
 def edit_profile(request):
     return render(request,'polls/edit_profile.html')
-
+@login_required(login_url='/polls/login/')
 def update_profile(request):
     if request.method=='POST':
         form=Update_Profile(request.POST)
@@ -69,7 +71,7 @@ def update_profile(request):
         return render(request,'polls/profile.html')
     else:return HttpResponse('form submission ok but something wrong with details')
 
-    
+@login_required(login_url='/polls/login/')   
 def submit_post(request):
     if request.method=='POST':
         form=Posts_Details(request.POST)
@@ -158,16 +160,16 @@ def verification_code_to_mail(request):
             else:return HttpResponse('not registered')
         else:return HttpResponse('form not valid')
     else:return HttpResponse('some thing went wrong')
-
+@login_required(login_url='/polls/login/')
 def blog(request):
     return render(request,'polls/blog.html')
-
+@login_required(login_url='/polls/login/')
 def createpost(request):
     return render(request,'polls/post_entry.html')
 
 #def submit_post(request):
  #   return render(request,'polls/posts_lists.html') 
-
+@login_required(login_url='/polls/login/')
 def followers(request):
     return render(request, 'polls/signin_error.html')
 
