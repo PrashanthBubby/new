@@ -23,10 +23,12 @@ from .serializers import (
     )
 
 class PostListAPIView(ListAPIView):
+    permission_classes=[IsAuthenticated]
     queryset=Posts.objects.all().order_by('-date')
     serializer_class=PostSerializer
 
 class PostCreateAPIView(CreateAPIView):
+    permission_classes=[IsAuthenticated]
     queryset=Posts.objects.all()
     serializer_class=PostCreateSerializer
     
@@ -40,14 +42,10 @@ class PostCreateAPIView(CreateAPIView):
 #class ProfileListAPIView(ListAPIView):
     #queryset=UserProfile.objects.all()
     #serializer_class=ProfileSerializer
+
 class ProfileListAPIView(ListAPIView):
     serializer_class=ProfileSerializer
-    def get_queryset(self):
-        user = self.request.user
-        queryset=UserProfile.objects.filter(name=user)
-        return queryset
-class ProfileListAPIView(ListAPIView):
-    serializer_class=ProfileSerializer
+    permission_classes=[IsAuthenticated]
     def get_queryset(self):
         user = self.request.user
         queryset=UserProfile.objects.filter(name=user)
@@ -60,7 +58,7 @@ class ProfileUpdateAPIView(RetrieveUpdateAPIView):
         queryset=UserProfile.objects.filter(name=user)
         return queryset
 
-
+#this is nit used from gere(
 class ProfileEditAPIView(UpdateAPIView):
     serializer_class=ProfileSerializer
     def get_queryset(self):
@@ -82,8 +80,12 @@ class ProfileEditAPIView(UpdateAPIView):
                                                      phone=9874562589
                                                      )
         return Response('done')
+#up to here)
+
+
         
 class PostUpdateAPIView(ListAPIView):
+    permission_classes=[IsAuthenticated]
     queryset=Posts.objects.all()
     serializer_class=PostSerializer
 
@@ -114,7 +116,7 @@ class EmailSendingAPIView(APIView):
         return Response(serializer.errors,status=HTTP_400_BAD_REQUEST)
 
 class EmailInviteAPIView(APIView):
-    permission_classes=[AllowAny]
+    permission_classes=[IsAuthenticated]
     serializer_class=EmailInviteSerializer
     def post(self, request, *args, **kwargs):
         data=request.data
