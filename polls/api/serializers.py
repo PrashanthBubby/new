@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from polls.models import Posts,Onetimelinks,UserProfile
 from django.db.models import Q
+from rest_framework.fields import CurrentUserDefault
 
 User=get_user_model()
 class PostSerializer(serializers.ModelSerializer):
@@ -65,6 +66,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         
 class UserLoginSerializer(serializers.ModelSerializer):
     email=serializers.EmailField(label='Email Address',required=True,allow_blank=False)
+
     class Meta:
         model= User
         fields=[
@@ -126,3 +128,23 @@ class EmailSerializer(serializers.ModelSerializer):
         else:
             raise serializers.ValidationError("Email is not registered or not valid")
         return data
+
+class EmailInviteSerializer(serializers.ModelSerializer):
+    email=serializers.EmailField(label='Email Address',required=True)
+    user= serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+    class Meta:
+        model=User
+        fields=['email','user']
+    def validate(self,data):
+        user=data.get('user')
+        email=data.get('email')
+        subject='Join Kriger Campus'
+        message = render_to_string('polls/email_invite.html', {
+                    'user': user,
+                    
+                    })
+        from_mail=settings.EMAIL_HOST_USER
+        to_mail=[email]
+        send_mail(subject,message,from_mail,to_mail,fail_silently=False)
+        return data
+        

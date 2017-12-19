@@ -18,7 +18,8 @@ from .serializers import (
     UserLoginSerializer,
     EmailSerializer,
     ProfileSerializer,
-    PostCreateSerializer
+    PostCreateSerializer,
+    EmailInviteSerializer
     )
 
 class PostListAPIView(ListAPIView):
@@ -111,3 +112,23 @@ class EmailSendingAPIView(APIView):
             new_data=serializer.data
             return Response(new_data,status=HTTP_200_OK)
         return Response(serializer.errors,status=HTTP_400_BAD_REQUEST)
+
+class EmailInviteAPIView(APIView):
+    permission_classes=[AllowAny]
+    serializer_class=EmailInviteSerializer
+    def post(self, request, *args, **kwargs):
+        data=request.data
+        context = {"request": self.request,}
+        serializer=EmailInviteSerializer(data=data,context=context)
+        if serializer.is_valid(raise_exception=True):
+            new_data=serializer.data
+            return Response('your invitation is on its way')
+        return Response(serializer.errors,status=HTTP_400_BAD_REQUEST)
+
+"""
+    def post(self,request):
+        user=request.user
+        data=request.data
+        serializer=EmailSerializer(data=data)
+        return Response({'username':user.email})
+"""
