@@ -148,3 +148,11 @@ class EmailInviteSerializer(serializers.ModelSerializer):
         send_mail(subject,message,from_mail,to_mail,fail_silently=False)
         return data
         
+class OtherInviteSerializer(serializers.ModelSerializer):
+    user= serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+    class Meta:
+        model=User
+        fields=['user']
+    def validate(self,data):
+        user=data.get('user')
+        return data

@@ -12,6 +12,7 @@ from .views import(
     PostCreateAPIView,
     ProfileUpdateAPIView,
     EmailInviteAPIView,
+    InviteOtherAPIView,
     )
 
 urlpatterns = [
@@ -23,7 +24,8 @@ urlpatterns = [
     #url(r'^edit_profile/', views.edit_profile, name='profile'),
     url(r'^(?P<pk>\d+)/edit/$',ProfileUpdateAPIView.as_view(), name='update_profile'),
     url(r'^forgot/',EmailSendingAPIView.as_view() , name='forgot'),
-    url(r'^email_invite/', EmailInviteAPIView.as_view(), name='forgot'),
+    url(r'^email_invite/', EmailInviteAPIView.as_view(), name='einvite'),
+    url(r'^other_invite/', InviteOtherAPIView.as_view(), name='appinvite'),
 
     #end here#
     url(r'^create/',PostCreateAPIView.as_view(), name='lists'),

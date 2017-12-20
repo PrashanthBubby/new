@@ -12,6 +12,7 @@ from rest_framework.status import HTTP_200_OK,HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from django.contrib.auth.mixins import LoginRequiredMixin
 import datetime
+from django.http import HttpResponse
 User=get_user_model()
 from .serializers import (
     PostSerializer,
@@ -19,9 +20,10 @@ from .serializers import (
     EmailSerializer,
     ProfileSerializer,
     PostCreateSerializer,
-    EmailInviteSerializer
+    EmailInviteSerializer,
+    OtherInviteSerializer,
     )
-
+import json
 class PostListAPIView(ListAPIView):
     permission_classes=[IsAuthenticated]
     queryset=Posts.objects.all().order_by('-date')
@@ -134,3 +136,19 @@ class EmailInviteAPIView(APIView):
         serializer=EmailSerializer(data=data)
         return Response({'username':user.email})
 """
+class InviteOtherAPIView(APIView):
+    permission_classes=[IsAuthenticated]
+    serializer_class=EmailInviteSerializer
+    def get(self,request,*args,**kwargs):
+        data=request.data
+        context = {"request": self.request,}
+        serializer=OtherInviteSerializer(data=data,context=context)
+        if serializer.is_valid(raise_exception=True):
+            #new_data=serializer.data
+            #userid=int(serializer.data['user'])
+            user=self.request.user.username
+            message='Your friend '+user+' wants you to join kriger campus on http://bit.do/kcapp' 
+            ser=json.dumps({'invite':message}, sort_keys=True,indent=4, separators=(',', ': '))
+            return HttpResponse(ser)
+        return Response(serializer.errors,status=HTTP_400_BAD_REQUEST)
+        
