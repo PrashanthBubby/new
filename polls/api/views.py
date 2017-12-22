@@ -40,7 +40,7 @@ class PostCreateAPIView(CreateAPIView):
 
     def perform_create(self,serializer):
         t=datetime.datetime.now()
-        serializer.save(username=self.request.user,date=t)
+        serializer.save(username=self.request.user,date=t,name=self.request.user.username)
 
 #class ProfileListAPIView(LoginRequiredMixin,ListAPIView):
  #   login_url= '/polls/login/'

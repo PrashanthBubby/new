@@ -13,6 +13,7 @@ class PostSerializer(serializers.ModelSerializer):
         model=Posts
         fields=[
             'username',
+            'name',
             'title',
             'post',
             'date',

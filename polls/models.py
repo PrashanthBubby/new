@@ -22,7 +22,8 @@ class UserProfile(models.Model):
 
 class Posts(models.Model):
     username=models.ForeignKey(User,on_delete=models.CASCADE)
-    title=models.TextField(max_length=15)
+    name=models.CharField(max_length=150,default='name')
+    title=models.TextField(max_length=150)
     post=models.TextField()
     date=models.DateTimeField(default='')
 
