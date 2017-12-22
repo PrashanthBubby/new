@@ -41,3 +41,17 @@ class Onetimelinks(models.Model):
 
     def __str__(self):
         return self.token
+class Comments(models.Model):
+    post=models.ForeignKey(Posts,on_delete=models.CASCADE)
+    comment=models.CharField(max_length=500,null=True,blank=True)
+    commenter=models.ForeignKey(User,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.comment
+
+
+class Requests(models.Model):
+    requested_by_id=models.ForeignKey(User,on_delete=models.CASCADE,related_name='request_created')
+    By_name=models.CharField(max_length=150,null=False,default='user')
+    requested_to_id=models.ForeignKey(User,on_delete=models.CASCADE,related_name='request_received')
+    to_name=models.CharField(max_length=150,null=False,default='user')

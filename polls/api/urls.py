@@ -13,11 +13,13 @@ from .views import(
     ProfileUpdateAPIView,
     EmailInviteAPIView,
     InviteOtherAPIView,
+    RequestsListAPIView,
+    SendRequestsAPIView
     )
 
 urlpatterns = [
-    #url(r'^signup/', views.signup, name='signup'),
-    #url(r'^signup_form/', views.signup_cr, name='signup'),
+    url(r'^krigers/', SendRequestsAPIView.as_view(), name='signup'),
+    url(r'^all_req/',RequestsListAPIView.as_view(), name='all_requests'),
     url(r'^login/', UserLoginAPIView.as_view(),name='login'),
     url(r'^profile/$', ProfileListAPIView.as_view(), name='profile'),
     url(r'^edit/', ProfileEditAPIView.as_view(), name='edit_profile'),

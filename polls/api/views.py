@@ -4,7 +4,7 @@ from rest_framework.generics import (ListAPIView,
                                      RetrieveAPIView,
                                      RetrieveUpdateAPIView,
                                      )
-from polls.models import Posts,UserProfile
+from polls.models import Posts,UserProfile,Requests,Comments
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework.response import Response
@@ -22,12 +22,15 @@ from .serializers import (
     PostCreateSerializer,
     EmailInviteSerializer,
     OtherInviteSerializer,
+    SendRequestsSerializer,
+    RequestsSerializer,
     )
 import json
 class PostListAPIView(ListAPIView):
     permission_classes=[IsAuthenticated]
     queryset=Posts.objects.all().order_by('-date')
     serializer_class=PostSerializer
+
 
 class PostCreateAPIView(CreateAPIView):
     permission_classes=[IsAuthenticated]
@@ -152,3 +155,48 @@ class InviteOtherAPIView(APIView):
             return HttpResponse(ser)
         return Response(serializer.errors,status=HTTP_400_BAD_REQUEST)
         
+
+class RequestsListAPIView(ListAPIView):
+    permission_classes=[IsAuthenticated]
+    
+    
+    serializer_class=RequestsSerializer
+    def get_queryset(self):
+        user=self.request.user
+        queryset=Requests.objects.all().filter(requested_by_id=user)
+        return queryset
+        
+class SendRequestsAPIView(ListAPIView):
+    permission_classes=[IsAuthenticated]
+    
+    serializer_class=SendRequestsSerializer
+    def get_queryset(self):
+        user = self.request.user
+        queryset=User.objects.all().exclude(username=user)
+        return queryset
+
+    def post(self,request,*args,**kwargs):
+        user = self.request.user.id
+        data=request.data
+        user_to=int(data['username'])
+        if(user_to==user):
+            return Response('Error while sending request')
+        else:
+            x=User.objects.get(id=user)
+            x1=x.username
+            y=User.objects.get(id=user_to)
+            y1=y.username
+            pre_req=Requests.objects.all().filter(requested_by_id=x).filter(requested_to_id=y)
+            if pre_req.exists():
+                return Response('Request sent')
+            else:
+                Requests.objects.create(requested_by_id=x,By_name=x1,requested_to_id=y,to_name=y1)
+                return Response('Request sent')
+        
+
+
+
+
+
+
+

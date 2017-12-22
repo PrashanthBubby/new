@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from polls.models import Posts,Onetimelinks,UserProfile
+from polls.models import Posts,Onetimelinks,UserProfile,Requests
 from django.db.models import Q
 from rest_framework.fields import CurrentUserDefault
 
@@ -156,3 +156,18 @@ class OtherInviteSerializer(serializers.ModelSerializer):
     def validate(self,data):
         user=data.get('user')
         return data
+class RequestsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Requests
+        fields=[
+                'requested_to_id',
+                'to_name'
+                
+                ]
+class SendRequestsSerializer(serializers.ModelSerializer):
+    username=serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    class Meta:
+        model=User
+        fields=['username',
+                'id',
+                ]
