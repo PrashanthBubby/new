@@ -3,21 +3,33 @@ from django.template.loader import render_to_string
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from polls.models import Posts,Onetimelinks,UserProfile,Requests
+from polls.models import Posts,Onetimelinks,UserProfile,Requests,Comments
 from django.db.models import Q
 from rest_framework.fields import CurrentUserDefault
 
 User=get_user_model()
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=UserProfile
+        fields=('first_name','last_name','image')
+    
 class PostSerializer(serializers.ModelSerializer):
+    user_details=UserDetailSerializer(source='get_user_details',required=True,many=True)
     class Meta:
         model=Posts
         fields=[
+            
             'username',
+            'user_details',
             'name',
             'title',
             'post',
             'date',
             ]
+
+
+    
 class PostCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model=Posts
@@ -157,6 +169,8 @@ class OtherInviteSerializer(serializers.ModelSerializer):
     def validate(self,data):
         user=data.get('user')
         return data
+
+
 class RequestsSerializer(serializers.ModelSerializer):
     class Meta:
         model=Requests
@@ -172,3 +186,26 @@ class SendRequestsSerializer(serializers.ModelSerializer):
         fields=['username',
                 'id',
                 ]
+class CommentsViewSerializer(serializers.ModelSerializer):
+    #postdetails=PostSerializer(required=False,read_only=True)
+
+    class Meta:
+        model=Comments
+        fields=[
+                'commenter_id',
+                'post',
+                'commenter_name',
+                'comment',
+                ]
+class CommentsSerializer(serializers.ModelSerializer):
+    commentss=CommentsViewSerializer(many=True)
+    class Meta:
+        model=Posts
+        fields=[
+            'username',
+            'name',
+            'title',
+            'post',
+            'date',
+            'commentss'
+            ]

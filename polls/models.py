@@ -19,7 +19,6 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.name.username
 
-
 class Posts(models.Model):
     username=models.ForeignKey(User,on_delete=models.CASCADE)
     name=models.CharField(max_length=150,default='name')
@@ -29,7 +28,12 @@ class Posts(models.Model):
 
     def __str__(self):
         return self.title
-    
+    def get_user_details(self):
+        return UserProfile.objects.filter(name__posts=self)
+        
+
+
+        
 from django.db.models.signals import post_save
 def create_profile(sender,**kwargs):
     if kwargs['created']:
@@ -45,7 +49,8 @@ class Onetimelinks(models.Model):
 class Comments(models.Model):
     post=models.ForeignKey(Posts,on_delete=models.CASCADE)
     comment=models.CharField(max_length=500,null=True,blank=True)
-    commenter=models.ForeignKey(User,on_delete=models.CASCADE)
+    commenter_id=models.ForeignKey(User,on_delete=models.CASCADE)
+    commenter_name=models.CharField(max_length=150,default='name')
 
     def __str__(self):
         return self.comment

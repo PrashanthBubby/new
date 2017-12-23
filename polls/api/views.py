@@ -24,6 +24,7 @@ from .serializers import (
     OtherInviteSerializer,
     SendRequestsSerializer,
     RequestsSerializer,
+    CommentsSerializer,
     )
 import json
 class PostListAPIView(ListAPIView):
@@ -193,7 +194,10 @@ class SendRequestsAPIView(ListAPIView):
                 Requests.objects.create(requested_by_id=x,By_name=x1,requested_to_id=y,to_name=y1)
                 return Response('Request sent')
         
-
+class CommentsAPIView(ListAPIView):
+    permission_classes=[IsAuthenticated]
+    serializer_class=CommentsSerializer
+    queryset=Posts.objects.all()
 
 
 

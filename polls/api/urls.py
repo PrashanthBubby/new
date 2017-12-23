@@ -14,7 +14,8 @@ from .views import(
     EmailInviteAPIView,
     InviteOtherAPIView,
     RequestsListAPIView,
-    SendRequestsAPIView
+    SendRequestsAPIView,
+    CommentsAPIView
     )
 
 urlpatterns = [
@@ -23,7 +24,7 @@ urlpatterns = [
     url(r'^login/', UserLoginAPIView.as_view(),name='login'),
     url(r'^profile/$', ProfileListAPIView.as_view(), name='profile'),
     url(r'^edit/', ProfileEditAPIView.as_view(), name='edit_profile'),
-    #url(r'^edit_profile/', views.edit_profile, name='profile'),
+    url(r'^comments_view/', CommentsAPIView.as_view(), name='profile'),
     url(r'^(?P<pk>\d+)/edit/$',ProfileUpdateAPIView.as_view(), name='update_profile'),
     url(r'^forgot/',EmailSendingAPIView.as_view() , name='forgot'),
     url(r'^email_invite/', EmailInviteAPIView.as_view(), name='einvite'),
