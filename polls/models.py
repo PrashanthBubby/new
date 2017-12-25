@@ -30,7 +30,10 @@ class Posts(models.Model):
         return self.title
     def get_user_details(self):
         return UserProfile.objects.filter(name__posts=self)
-        
+
+    def get_post_comments(self):
+        posts=Posts.objects.all()
+        return Comments.objects.all().filter(post__id=self.id)
 
 
         
@@ -51,7 +54,7 @@ class Comments(models.Model):
     comment=models.CharField(max_length=500,null=True,blank=True)
     commenter_id=models.ForeignKey(User,on_delete=models.CASCADE)
     commenter_name=models.CharField(max_length=150,default='name')
-
+    date=models.DateTimeField(default='1999-01-01 01:01:01')
     def __str__(self):
         return self.comment
 

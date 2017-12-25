@@ -25,6 +25,7 @@ from .serializers import (
     SendRequestsSerializer,
     RequestsSerializer,
     CommentsSerializer,
+    CommentCreateSerializer,
     )
 import json
 class PostListAPIView(ListAPIView):
@@ -42,6 +43,17 @@ class PostCreateAPIView(CreateAPIView):
     def perform_create(self,serializer):
         t=datetime.datetime.now()
         serializer.save(username=self.request.user,date=t,name=self.request.user.username)
+
+class CommentCreateAPIView(CreateAPIView):
+    permission_classes=[IsAuthenticated]
+    queryset=Comments.objects.all()
+    serializer_class=CommentCreateSerializer
+
+    def perform_create(self,serializer):
+        t=datetime.datetime.now()
+        serializer.save(commenter_id=self.request.user,commenter_name=self.request.user.username,date=t)
+        
+
 
 #class ProfileListAPIView(LoginRequiredMixin,ListAPIView):
  #   login_url= '/polls/login/'

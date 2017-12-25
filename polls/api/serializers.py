@@ -196,16 +196,33 @@ class CommentsViewSerializer(serializers.ModelSerializer):
                 'post',
                 'commenter_name',
                 'comment',
+                'date'
                 ]
 class CommentsSerializer(serializers.ModelSerializer):
-    commentss=CommentsViewSerializer(many=True)
+    comments=CommentsViewSerializer(source='get_post_comments',many=True)
     class Meta:
         model=Posts
         fields=[
-            'username',
-            'name',
             'title',
             'post',
             'date',
-            'commentss'
+            'username',
+            'id',
+            'name',
+            'comments',
             ]
+
+class CommentCreateSerializer(serializers.ModelSerializer):
+    comment=serializers.CharField()
+    class Meta:
+        model=Comments
+        fields=[
+            'post',
+            'comment'
+            ]
+
+
+
+
+
+

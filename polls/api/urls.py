@@ -15,7 +15,8 @@ from .views import(
     InviteOtherAPIView,
     RequestsListAPIView,
     SendRequestsAPIView,
-    CommentsAPIView
+    CommentsAPIView,
+    CommentCreateAPIView,
     )
 
 urlpatterns = [
@@ -30,6 +31,7 @@ urlpatterns = [
     url(r'^email_invite/', EmailInviteAPIView.as_view(), name='einvite'),
     url(r'^other_invite/', InviteOtherAPIView.as_view(), name='appinvite'),
 
+    
     #end here#
     url(r'^create/',PostCreateAPIView.as_view(), name='lists'),
     url(r'^postsinapi/',PostListAPIView.as_view(), name='lists'),
@@ -39,5 +41,5 @@ urlpatterns = [
     #url(r'^tags/', views.followers, name='tags'),
     
     #url(r'^create_post/', views.createpost, name='createpost'),
-    #url(r'^submit_post/', views.submit_post, name='createpost'),
+    url(r'^comment/', CommentCreateAPIView.as_view(), name='make_comment'),
 ]
