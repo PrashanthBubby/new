@@ -188,7 +188,7 @@ class SendRequestsSerializer(serializers.ModelSerializer):
                 ]
 class CommentsViewSerializer(serializers.ModelSerializer):
     #postdetails=PostSerializer(required=False,read_only=True)
-
+    commenter_details=UserDetailSerializer(source='get_user_details',required=True,many=True)
     class Meta:
         model=Comments
         fields=[
@@ -196,10 +196,12 @@ class CommentsViewSerializer(serializers.ModelSerializer):
                 'post',
                 'commenter_name',
                 'comment',
-                'date'
+                'date',
+                'commenter_details',
                 ]
 class CommentsSerializer(serializers.ModelSerializer):
     comments=CommentsViewSerializer(source='get_post_comments',many=True)
+    post_by_details=UserDetailSerializer(source='get_user_details',required=True,many=True)
     class Meta:
         model=Posts
         fields=[
@@ -209,16 +211,19 @@ class CommentsSerializer(serializers.ModelSerializer):
             'username',
             'id',
             'name',
+            'post_by_details',
             'comments',
             ]
 
 class CommentCreateSerializer(serializers.ModelSerializer):
     comment=serializers.CharField()
+    #commenter_details=UserDetail
     class Meta:
         model=Comments
         fields=[
             'post',
-            'comment'
+            'comment',
+            
             ]
 
 
