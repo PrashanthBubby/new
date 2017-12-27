@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from polls.models import Posts,Onetimelinks,UserProfile,Requests,Comments
+from polls.models import Posts,Onetimelinks,UserProfile,Requests,Comments,Likes
 from django.db.models import Q
 from rest_framework.fields import CurrentUserDefault
 
@@ -26,10 +26,7 @@ class PostSerializer(serializers.ModelSerializer):
             'title',
             'post',
             'date',
-            ]
-
-
-    
+            ]  
 class PostCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model=Posts
@@ -39,7 +36,6 @@ class PostCreateSerializer(serializers.ModelSerializer):
             'post',
             #'date',
             ]
-
 class UserProfileSerializer(serializers.ModelSerializer):
     #follows = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
@@ -56,8 +52,6 @@ class ProfileSerializer(serializers.ModelSerializer):
     projects=serializers.CharField(label='projects',required=False,allow_blank=True)
     internship=serializers.CharField(label='internship',required=False,allow_blank=True)
     phone=serializers.IntegerField(label='phone',required=False)
-    
-
     class Meta:
         model=UserProfile
         fields=[
@@ -74,9 +68,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             'projects',
             'internship',
             'phone',
-            ]
-
-        
+            ]       
 class UserLoginSerializer(serializers.ModelSerializer):
     email=serializers.EmailField(label='Email Address',required=True,allow_blank=False)
 
@@ -99,9 +91,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
         if user_obj:
             if not user_obj.check_password(password):
                 raise serializers.ValidationError("Password is incorrect.please enter correct password")
-                
         return data
-
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from time import time
@@ -141,7 +131,6 @@ class EmailSerializer(serializers.ModelSerializer):
         else:
             raise serializers.ValidationError("Email is not registered or not valid")
         return data
-
 class EmailInviteSerializer(serializers.ModelSerializer):
     email=serializers.EmailField(label='Email Address',required=True)
     user= serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
@@ -159,8 +148,7 @@ class EmailInviteSerializer(serializers.ModelSerializer):
         from_mail=settings.EMAIL_HOST_USER
         to_mail=[email]
         send_mail(subject,message,from_mail,to_mail,fail_silently=False)
-        return data
-        
+        return data      
 class OtherInviteSerializer(serializers.ModelSerializer):
     user= serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
     class Meta:
@@ -169,15 +157,12 @@ class OtherInviteSerializer(serializers.ModelSerializer):
     def validate(self,data):
         user=data.get('user')
         return data
-
-
 class RequestsSerializer(serializers.ModelSerializer):
     class Meta:
         model=Requests
         fields=[
                 'requested_to_id',
-                'to_name'
-                
+                'to_name',                
                 ]
 class SendRequestsSerializer(serializers.ModelSerializer):
     username=serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
@@ -223,11 +208,9 @@ class CommentCreateSerializer(serializers.ModelSerializer):
         fields=[
             'post',
             'comment',
-            
             ]
-
-
-
-
-
-
+class LikesSerializer(serializers.ModelSerializer):
+	liked_post=serializers.PrimaryKeyRelatedField(queryset=Posts.objects.all())
+	class Meta:
+		model=Likes
+		fields=['liked_post']

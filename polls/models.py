@@ -65,3 +65,13 @@ class Requests(models.Model):
     By_name=models.CharField(max_length=150,null=False,default='user')
     requested_to_id=models.ForeignKey(User,on_delete=models.CASCADE,related_name='request_received')
     to_name=models.CharField(max_length=150,null=False,default='user')
+
+
+
+class Likes(models.Model):
+	liked_by=models.ForeignKey(User,on_delete=models.CASCADE,related_name='liked_by')
+	liked_by_name=models.CharField(max_length=150,null=False,default='user')
+	liked_post=models.ForeignKey(Posts,on_delete=models.CASCADE,related_name='liked_post')
+	liked_post_title=models.CharField(max_length=100,null=False,default='post')
+	def __str__(self):
+		return self.liked_by_name+' liked '+self.liked_post_title

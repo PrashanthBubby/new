@@ -4,7 +4,7 @@ from rest_framework.generics import (ListAPIView,
                                      RetrieveAPIView,
                                      RetrieveUpdateAPIView,
                                      )
-from polls.models import Posts,UserProfile,Requests,Comments
+from polls.models import Posts,UserProfile,Requests,Comments,Likes
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework.response import Response
@@ -26,6 +26,7 @@ from .serializers import (
     RequestsSerializer,
     CommentsSerializer,
     CommentCreateSerializer,
+	LikesSerializer,
     )
 import json
 class PostListAPIView(ListAPIView):
@@ -205,14 +206,33 @@ class SendRequestsAPIView(ListAPIView):
             else:
                 Requests.objects.create(requested_by_id=x,By_name=x1,requested_to_id=y,to_name=y1)
                 return Response('Request sent')
+class LikesAPIView(ListAPIView):
+	permission_classes=[IsAuthenticated]
+	serializer_class=LikesSerializer
+	queryset=Likes.objects.all()
+	def post(self,request,*args,**kwargs):
+		data=request.data
+		user=self.request.user.id
+		post=int(data['liked_post'])
+		x=Likes.objects.all().filter(liked_post=post)
+		count=x.count()
+		likedby_details=[]
+		#main_dic={}
+		#n=1
+		for idd in x:
+			y=(idd.liked_by.id)
+			sub_dic={}
+			sub_dic={'image':[user.userprofile.image.url for user in User.objects.all().filter(id=int(y))],
+			'first_name':[user.userprofile.first_name for user in User.objects.all().filter(id=int(y))],
+			'last_name':[user.userprofile.last_name for user in User.objects.all().filter(id=int(y))]
+			}
+			likedby_details.append(sub_dic.copy())
+			#main_dic.update(sub_dic)
+			#n=n+1
+		return Response({"likes_count":count,"details":likedby_details})
+
         
 class CommentsAPIView(ListAPIView):
     permission_classes=[IsAuthenticated]
     serializer_class=CommentsSerializer
     queryset=Posts.objects.all()
-
-
-
-
-
-
