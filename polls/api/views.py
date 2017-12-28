@@ -270,4 +270,4 @@ class LikesCreateAPIView(ListAPIView):
             return Response('already exists')
         else:
             Likes.objects.create(liked_by=user,liked_by_name=user_name,liked_post=y)
-            return Response('Liked')
+            return Response('Liked post '+str(y))
