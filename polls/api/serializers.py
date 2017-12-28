@@ -254,3 +254,10 @@ class OwnPostsSerializer(serializers.ModelSerializer):
     class Meta:
         model=Posts
         fields=['id','title','post','date','likes']
+
+class CommentedSerializer(serializers.ModelSerializer):
+    post_det=PostLikesSerializer(source='get_comm_det',many=True)
+    class Meta:
+        model=Comments
+        fields=['id','post','comment','date','post_det']
+

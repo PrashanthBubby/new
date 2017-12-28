@@ -61,6 +61,8 @@ class Comments(models.Model):
         return self.comment
     def get_user_details(self):
         return UserProfile.objects.filter(name__comments=self.id)
+    def get_comm_det(self):
+        return Posts.objects.all().filter(title=self.post)
 
 class Requests(models.Model):
     requested_by_id=models.ForeignKey(User,on_delete=models.CASCADE,related_name='request_created')

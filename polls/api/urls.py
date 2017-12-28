@@ -20,6 +20,7 @@ from .views import(
 	LikesAPIView,
 	LikesCreateAPIView,
     LikesOnLikedPostAPIView,
+    CommentsOnCommentedPostAPIView,
     )
 
 urlpatterns = [
@@ -33,16 +34,12 @@ urlpatterns = [
     url(r'^forgot/',EmailSendingAPIView.as_view() , name='forgot'),
     url(r'^email_invite/', EmailInviteAPIView.as_view(), name='einvite'),
     url(r'^other_invite/', InviteOtherAPIView.as_view(), name='appinvite'),
-
-    
-    #end here#
     url(r'^create/',PostCreateAPIView.as_view(), name='lists'),
     url(r'^postsinapi/',PostListAPIView.as_view(), name='lists'),
     #url(r'^(?P<pk>\d+)$', views.DPostssss.as_view(), name='dposts'),
     url(r'^likes/', LikesAPIView.as_view(), name='like_a_post'),
     url(r'^like_post/', LikesCreateAPIView.as_view(), name='like_post'),
     url(r'^liked_posts/', LikesOnLikedPostAPIView.as_view(), name='likes_on_liked_posts'),
-    
-    #url(r'^notify_likes/', NotifyLikesAPIView.as_view(), name='likes_notify'),
+    url(r'^comented_posts/', CommentsOnCommentedPostAPIView.as_view(), name='comments on commented'),
     url(r'^comment/', CommentCreateAPIView.as_view(), name='make_comment'),
 ]
