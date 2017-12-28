@@ -28,6 +28,7 @@ class Posts(models.Model):
 
     def __str__(self):
         return self.title
+
     def get_user_details(self):
         return UserProfile.objects.filter(name__posts=self)
 
@@ -71,7 +72,6 @@ class Requests(models.Model):
 class Likes(models.Model):
 	liked_by=models.ForeignKey(User,on_delete=models.CASCADE,related_name='liked_by')
 	liked_by_name=models.CharField(max_length=150,null=False,default='user')
-	liked_post=models.ForeignKey(Posts,on_delete=models.CASCADE,related_name='liked_post')
-	liked_post_title=models.CharField(max_length=100,null=False,default='post')
+	liked_post=models.ForeignKey(Posts,on_delete=models.CASCADE,related_name='liked_pooost')
 	def __str__(self):
-		return self.liked_by_name+' liked '+self.liked_post_title
+		return self.liked_by_name+' liked '+str(self.liked_post)

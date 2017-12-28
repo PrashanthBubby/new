@@ -53,9 +53,14 @@ class CommentCreateAPIView(CreateAPIView):
     def perform_create(self,serializer):
         t=datetime.datetime.now()
         serializer.save(commenter_id=self.request.user,commenter_name=self.request.user.username,date=t)
-        
-
-
+"""        
+class LikesCreateAPIView(CreateAPIView):
+    permission_classes=[IsAuthenticated]
+    queryset=Likes.objects.all()
+    serializer_class=LikesSerializer
+    def perform_create(self,serializer):
+	    serializer.save(liked_by=self.request.user,liked_by_name=self.request.user.username)
+"""
 #class ProfileListAPIView(LoginRequiredMixin,ListAPIView):
  #   login_url= '/polls/login/'
 #class ProfileListAPIView(ListAPIView):
@@ -206,6 +211,15 @@ class SendRequestsAPIView(ListAPIView):
             else:
                 Requests.objects.create(requested_by_id=x,By_name=x1,requested_to_id=y,to_name=y1)
                 return Response('Request sent')
+
+class LikesCreateAPIView(UpdateAPIView):
+    permission_classes=[IsAuthenticated]
+    queryset=Likes.objects.all()
+    serializer_class=LikesSerializer
+    def perform_create(self,serializer):
+	    serializer.save(liked_by=self.request.user,liked_by_name=self.request.user.username)
+
+
 class LikesAPIView(ListAPIView):
 	permission_classes=[IsAuthenticated]
 	serializer_class=LikesSerializer
@@ -236,3 +250,24 @@ class CommentsAPIView(ListAPIView):
     permission_classes=[IsAuthenticated]
     serializer_class=CommentsSerializer
     queryset=Posts.objects.all()
+
+class LikesCreateAPIView(ListAPIView):
+    permission_classes=[IsAuthenticated]
+    queryset=Likes.objects.all()
+    serializer_class=LikesSerializer
+
+    def post(self,request,*args,**kwargs):
+        data=request.data
+        post=int(data['liked_post'])
+        y=Posts.objects.get(id=post)
+        x=Likes.objects.all().filter(liked_post=post)
+        if x.exists():
+            return Response('already liked')
+        user=self.request.user
+        user_name=self.request.user.username
+        pre_exists=Likes.objects.all().filter(liked_post=post).filter(liked_by=user)
+        if pre_exists.exists():
+            return Response('already exists')
+        else:
+            Likes.objects.create(liked_by=user,liked_by_name=user_name,liked_post=y)
+            return Response('Liked')

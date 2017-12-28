@@ -18,6 +18,7 @@ from .views import(
     CommentsAPIView,
     CommentCreateAPIView,
 	LikesAPIView,
+	LikesCreateAPIView,
     )
 
 urlpatterns = [
@@ -38,7 +39,7 @@ urlpatterns = [
     url(r'^postsinapi/',PostListAPIView.as_view(), name='lists'),
     #url(r'^(?P<pk>\d+)$', views.DPostssss.as_view(), name='dposts'),
     url(r'^likes/', LikesAPIView.as_view(), name='like_a_post'),
-    #url(r'^messages/', views.followers, name='messages'),
+    url(r'^like_post/', LikesCreateAPIView.as_view(), name='like_post'),
     #url(r'^tags/', views.followers, name='tags'),
     
     #url(r'^create_post/', views.createpost, name='createpost'),
