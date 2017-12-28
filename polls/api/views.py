@@ -281,7 +281,7 @@ class LikesOnOwnPostAPIView(ListAPIView):
         queryset=Posts.objects.all().filter(username=user)
         return queryset
 """
-class LikesOnOwnPostAPIView(ListAPIView):
+class LikesOnLikedPostAPIView(ListAPIView):
     permission_classes=[IsAuthenticated]
     serializer_class=LikesSerializer
     def get_queryset(self,*args,**kwargs):
