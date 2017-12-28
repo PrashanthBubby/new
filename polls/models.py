@@ -35,9 +35,10 @@ class Posts(models.Model):
     def get_post_comments(self):
         posts=Posts.objects.all()
         return Comments.objects.all().filter(post__id=self.id)
-
-
-        
+    def get_likes(self):
+        return Likes.objects.all().filter(liked_post__id=self.id)
+    def get_owner(self):
+        return UserProfile.objects.filter(name=self.username)
 from django.db.models.signals import post_save
 def create_profile(sender,**kwargs):
     if kwargs['created']:
@@ -70,8 +71,11 @@ class Requests(models.Model):
 
 
 class Likes(models.Model):
-	liked_by=models.ForeignKey(User,on_delete=models.CASCADE,related_name='liked_by')
-	liked_by_name=models.CharField(max_length=150,null=False,default='user')
-	liked_post=models.ForeignKey(Posts,on_delete=models.CASCADE,related_name='liked_pooost')
-	def __str__(self):
-		return self.liked_by_name+' liked '+str(self.liked_post)
+    liked_by=models.ForeignKey(User,on_delete=models.CASCADE,related_name='liked_by')
+    liked_by_name=models.CharField(max_length=150,null=False,default='user')
+    liked_post=models.ForeignKey(Posts,on_delete=models.CASCADE,related_name='liked_pooost')
+    def __str__(self):
+        return self.liked_by_name+' liked '+str(self.liked_post)
+    def get_details(self):
+        return Posts.objects.all().filter(title=self.liked_post)
+

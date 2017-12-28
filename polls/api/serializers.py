@@ -216,3 +216,41 @@ class LikesSerializer(serializers.ModelSerializer):
 	class Meta:
 		model=Likes
 		fields=['liked_post']
+
+"""
+class LikesSerializer(serializers.ModelSerializer):
+    user_details=UserDetailSerializer(source='get_details',many=True)
+    class Meta:
+        model=Likes
+        fields=['liked_by','user_details']
+
+
+class OwnPostsSerializer(serializers.ModelSerializer):
+    likes=LikesSerializer(source='get_likes',many=True)
+    class Meta:
+        model=Posts
+        fields=['id','title','post','date','likes']
+"""
+class PostLikesSerializer(serializers.ModelSerializer):
+    owner=UserDetailSerializer(source='get_owner',many=True)
+    class Meta:
+        model=Posts
+        fields=[
+            #'username',
+            'owner',
+            'title',
+            'post',
+            #'date',
+            ]
+class LikesSerializer(serializers.ModelSerializer):
+    post_details=PostLikesSerializer(source='get_details',many=True)
+    class Meta:
+        model=Likes
+        fields=['liked_post','post_details']
+
+
+class OwnPostsSerializer(serializers.ModelSerializer):
+    likes=LikesSerializer(source='get_likes',many=True)
+    class Meta:
+        model=Posts
+        fields=['id','title','post','date','likes']
