@@ -273,8 +273,8 @@ class CommentedSerializer(serializers.ModelSerializer):
         fields=['id','post','comment','date','post_det']
 
 class CommentsOnOwnPostsSerializer(serializers.ModelSerializer):
-    #liked_by_details=UserDetailSerializer(source='get_user_details',many=True)
-    #post=OwnPostLikesSerializer(source='get_details',many=True)
+    commenter_details=UserDetailSerializer(source='get_user_det',many=True)
+    pst_detail=OwnPostLikesSerializer(source='get_details',many=True)
     class Meta:
         model=Comments
-        fields=('__all__')
+        fields=['post','pst_detail','comment','commenter_name','commenter_details','date']

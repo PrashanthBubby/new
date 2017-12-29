@@ -56,13 +56,17 @@ class Comments(models.Model):
     comment=models.CharField(max_length=500,null=True,blank=True)
     commenter_id=models.ForeignKey(User,on_delete=models.CASCADE)
     commenter_name=models.CharField(max_length=150,default='name')
-    date=models.DateTimeField(default='1999-01-01 01:01:01')
+    date=models.DateTimeField(default='')
     def __str__(self):
         return self.comment
     def get_user_details(self):
         return UserProfile.objects.filter(name__comments=self.id)
     def get_comm_det(self):
         return Posts.objects.all().filter(title=self.post)
+    def get_details(self):
+        return Posts.objects.all().filter(title=self.post)
+    def get_user_det(self):
+        return UserProfile.objects.all().filter(name=self.commenter_id)
 
 class Requests(models.Model):
     requested_by_id=models.ForeignKey(User,on_delete=models.CASCADE,related_name='request_created')

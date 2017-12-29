@@ -312,5 +312,5 @@ class CommentsOnOwnPostAPIView(ListAPIView):
     def get_queryset(self,*args,**kwargs):
         user = self.request.user
         posts=Posts.objects.all().filter(username=user)
-        queryset=Comments.objects.all().filter(post__id__in=[e.id for e in posts])
+        queryset=Comments.objects.all().filter(post__id__in=[e.id for e in posts]).order_by('-date')
         return queryset
