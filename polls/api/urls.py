@@ -21,6 +21,7 @@ from .views import(
 	LikesCreateAPIView,
     LikesOnLikedPostAPIView,
     CommentsOnCommentedPostAPIView,
+    LikesOnOwnPostAPIView,
     )
 
 urlpatterns = [
@@ -42,4 +43,5 @@ urlpatterns = [
     url(r'^liked_posts/', LikesOnLikedPostAPIView.as_view(), name='likes_on_liked_posts'),
     url(r'^comented_posts/', CommentsOnCommentedPostAPIView.as_view(), name='comments on commented'),
     url(r'^comment/', CommentCreateAPIView.as_view(), name='make_comment'),
+    url(r'^own_posts/', LikesOnOwnPostAPIView.as_view(), name='likes_on_own_posts'),
 ]

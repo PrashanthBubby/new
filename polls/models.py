@@ -76,8 +76,11 @@ class Likes(models.Model):
     liked_by=models.ForeignKey(User,on_delete=models.CASCADE,related_name='liked_by')
     liked_by_name=models.CharField(max_length=150,null=False,default='user')
     liked_post=models.ForeignKey(Posts,on_delete=models.CASCADE,related_name='liked_pooost')
+    date=models.DateTimeField(default='1999-01-01 01:01:01')
+
     def __str__(self):
         return self.liked_by_name+' liked '+str(self.liked_post)
     def get_details(self):
         return Posts.objects.all().filter(title=self.liked_post)
-
+    def get_user_details(self):
+        return UserProfile.objects.all().filter(name=self.liked_by)

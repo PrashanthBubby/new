@@ -262,16 +262,14 @@ class LikesCreateAPIView(ListAPIView):
         data=request.data
         post=int(data['liked_post'])
         y=Posts.objects.get(id=post)
-        x=Likes.objects.all().filter(liked_post=post)
-        if x.exists():
-            return Response('already liked')
         user=self.request.user
         user_name=self.request.user.username
         pre_exists=Likes.objects.all().filter(liked_post=post).filter(liked_by=user)
         if pre_exists.exists():
-            return Response('already exists')
+            return Response('already liked')
         else:
-            Likes.objects.create(liked_by=user,liked_by_name=user_name,liked_post=y)
+            t=datetime.datetime.now()
+            Likes.objects.create(liked_by=user,liked_by_name=user_name,liked_post=y,date=t)
             return Response('Liked post '+str(y))
 """
 class LikesOnOwnPostAPIView(ListAPIView):
@@ -303,6 +301,6 @@ class LikesOnOwnPostAPIView(ListAPIView):
     serializer_class=OwnPostsSerializer
     def get_queryset(self,*args,**kwargs):
         user = self.request.user
-
-        queryset=Likes.objects.all().filter(commenter_id=user)
+        posts=Posts.objects.all().filter(username=user)
+        queryset=Likes.objects.all().filter(liked_post__id__in=[e.id for e in posts])
         return queryset
