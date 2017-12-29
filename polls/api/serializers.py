@@ -277,4 +277,4 @@ class CommentsOnOwnPostsSerializer(serializers.ModelSerializer):
     pst_detail=OwnPostLikesSerializer(source='get_details',many=True)
     class Meta:
         model=Comments
-        fields=['post','pst_detail','comment','commenter_name','commenter_details','date']
+        fields=['post','pst_detail','comment','commenter_id','commenter_name','commenter_details','date']
