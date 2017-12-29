@@ -56,7 +56,7 @@ class Comments(models.Model):
     comment=models.CharField(max_length=500,null=True,blank=True)
     commenter_id=models.ForeignKey(User,on_delete=models.CASCADE)
     commenter_name=models.CharField(max_length=150,default='name')
-    date=models.DateTimeField(default='')
+    date=models.DateTimeField(default='1999-01-01 01:01:01')
     def __str__(self):
         return self.comment
     def get_user_details(self):
