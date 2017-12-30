@@ -243,10 +243,14 @@ class PostLikesSerializer(serializers.ModelSerializer):
             #'date',
             ]
 class LikesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Likes
+        fields=['liked_post']
+class LikedSerializer(serializers.ModelSerializer):
     post_details=PostLikesSerializer(source='get_details',many=True)
     class Meta:
         model=Likes
-        fields=['liked_post','post_details']
+        fields=['liked_post','post_details','date']
 
 class OwnPostLikesSerializer(serializers.ModelSerializer):
 

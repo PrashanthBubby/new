@@ -30,6 +30,7 @@ from .serializers import (
     OwnPostsSerializer,
     CommentedSerializer,
     CommentsOnOwnPostsSerializer,
+    LikedSerializer,
     )
 import json
 class PostListAPIView(ListAPIView):
@@ -283,7 +284,7 @@ class LikesOnOwnPostAPIView(ListAPIView):
 """
 class LikesOnLikedPostAPIView(ListAPIView):
     permission_classes=[IsAuthenticated]
-    serializer_class=LikesSerializer
+    serializer_class=LikedSerializer
     def get_queryset(self,*args,**kwargs):
         user = self.request.user
         queryset=Likes.objects.all().filter(liked_by=user)
