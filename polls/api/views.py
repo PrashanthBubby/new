@@ -287,7 +287,7 @@ class LikesOnLikedPostAPIView(ListAPIView):
     serializer_class=LikedSerializer
     def get_queryset(self,*args,**kwargs):
         user = self.request.user
-        queryset=Likes.objects.all().filter(liked_by=user)
+        queryset=Likes.objects.all().filter(liked_by=user).order_by('-date')
         return queryset
 
 class CommentsOnCommentedPostAPIView(ListAPIView):
@@ -295,7 +295,7 @@ class CommentsOnCommentedPostAPIView(ListAPIView):
     serializer_class=CommentedSerializer
     def get_queryset(self,*args,**kwargs):
         user = self.request.user
-        queryset=Comments.objects.all().filter(commenter_id=user)
+        queryset=Comments.objects.all().filter(commenter_id=user).order_by('-date')
         return queryset
 
 class LikesOnOwnPostAPIView(ListAPIView):
