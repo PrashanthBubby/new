@@ -14,7 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 import datetime
 from django.http import HttpResponse
 User=get_user_model()
-from .serializers import (
+from .serializers import (#importing serializers
     PostSerializer,
     UserLoginSerializer,
     EmailSerializer,
@@ -33,23 +33,23 @@ from .serializers import (
     LikedSerializer,
     )
 import json
-class PostListAPIView(ListAPIView):
-    permission_classes=[IsAuthenticated]
+class PostListAPIView(ListAPIView):#returns list of all posts
+    permission_classes=[IsAuthenticated]# permissions.allows only if the user is authenticated
     queryset=Posts.objects.all().order_by('-date')
-    serializer_class=PostSerializer
+    serializer_class=PostSerializer#using the imported serializer
 
 
-class PostCreateAPIView(CreateAPIView):
+class PostCreateAPIView(CreateAPIView):#create  the post
     permission_classes=[IsAuthenticated]
     queryset=Posts.objects.all()
     serializer_class=PostCreateSerializer
     
 
     def perform_create(self,serializer):
-        t=datetime.datetime.now()
-        serializer.save(username=self.request.user,date=t,name=self.request.user.username)
+        t=datetime.datetime.now()#getting the present time
+        serializer.save(username=self.request.user,date=t,name=self.request.user.username)#saving the instance of the post
 
-class CommentCreateAPIView(CreateAPIView):
+class CommentCreateAPIView(CreateAPIView):#commenting on a post
     permission_classes=[IsAuthenticated]
     queryset=Comments.objects.all()
     serializer_class=CommentCreateSerializer
@@ -71,15 +71,15 @@ class LikesCreateAPIView(CreateAPIView):
     #queryset=UserProfile.objects.all()
     #serializer_class=ProfileSerializer
 
-class ProfileListAPIView(ListAPIView):
+class ProfileListAPIView(ListAPIView):#To view the profile a authenticated user
     serializer_class=ProfileSerializer
     permission_classes=[IsAuthenticated]
     def get_queryset(self):
         user = self.request.user
-        queryset=UserProfile.objects.filter(name=user)
-        return queryset
+        queryset=UserProfile.objects.filter(name=user)#filtering to get the details of the requested user
+        return queryset#returning the result
 
-class ProfileUpdateAPIView(RetrieveUpdateAPIView):
+class ProfileUpdateAPIView(RetrieveUpdateAPIView):#udating the profile
     serializer_class=ProfileSerializer
     def get_queryset(self):
         user = self.request.user
@@ -119,19 +119,19 @@ class PostUpdateAPIView(ListAPIView):
 
 
 
-class UserLoginAPIView(APIView):
+class UserLoginAPIView(APIView):#checks the given details and returns wether the credentials are valid or invalid 
     permission_classes=[AllowAny]
     serializer_class=UserLoginSerializer
 
     def post(self, request, *args, **kwargs):
-        data=request.data
+        data=request.data#getting data from the form
         serializer=UserLoginSerializer(data=data)
-        if serializer.is_valid(raise_exception=True):
+        if serializer.is_valid(raise_exception=True):#To check wether the data is valid or not
             new_data=serializer.data
             return Response(new_data,status=HTTP_200_OK)
-        return Response(serializer.errors,status=HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors,status=HTTP_400_BAD_REQUEST)#returns error 400 if the data is invalid
 
-class EmailSendingAPIView(APIView):
+class EmailSendingAPIView(APIView):#to send the email 
     permission_classes=[AllowAny]
     serializer_class=EmailSerializer
 
@@ -142,13 +142,13 @@ class EmailSendingAPIView(APIView):
             new_data=serializer.data
             return Response(new_data,status=HTTP_200_OK)
         return Response(serializer.errors,status=HTTP_400_BAD_REQUEST)
-
-class EmailInviteAPIView(APIView):
+ 
+class EmailInviteAPIView(APIView):#to invite through email
     permission_classes=[IsAuthenticated]
     serializer_class=EmailInviteSerializer
     def post(self, request, *args, **kwargs):
         data=request.data
-        context = {"request": self.request,}
+        context = {"request": self.request,}#sending request through context
         serializer=EmailInviteSerializer(data=data,context=context)
         if serializer.is_valid(raise_exception=True):
             new_data=serializer.data
@@ -162,6 +162,7 @@ class EmailInviteAPIView(APIView):
         serializer=EmailSerializer(data=data)
         return Response({'username':user.email})
 """
+#not using this code
 class InviteOtherAPIView(APIView):
     permission_classes=[IsAuthenticated]
     serializer_class=EmailInviteSerializer
@@ -179,19 +180,16 @@ class InviteOtherAPIView(APIView):
         return Response(serializer.errors,status=HTTP_400_BAD_REQUEST)
         
 
-class RequestsListAPIView(ListAPIView):
+class RequestsListAPIView(ListAPIView):#returns all the requests that user had sent
     permission_classes=[IsAuthenticated]
-    
-    
     serializer_class=RequestsSerializer
     def get_queryset(self):
         user=self.request.user
         queryset=Requests.objects.all().filter(requested_by_id=user)
         return queryset
         
-class SendRequestsAPIView(ListAPIView):
-    permission_classes=[IsAuthenticated]
-    
+class SendRequestsAPIView(ListAPIView):#send requests
+    permission_classes=[IsAuthenticated]    
     serializer_class=SendRequestsSerializer
     def get_queryset(self):
         user = self.request.user
@@ -210,21 +208,39 @@ class SendRequestsAPIView(ListAPIView):
             y=User.objects.get(id=user_to)
             y1=y.username
             pre_req=Requests.objects.all().filter(requested_by_id=x).filter(requested_to_id=y)
-            if pre_req.exists():
+            if pre_req.exists():#checking wether the user had already sent the request 
                 return Response('Request sent')
             else:
-                Requests.objects.create(requested_by_id=x,By_name=x1,requested_to_id=y,to_name=y1)
+                Requests.objects.create(requested_by_id=x,By_name=x1,requested_to_id=y,to_name=y1)#if not sent send req
                 return Response('Request sent')
-
+"""
 class LikesCreateAPIView(UpdateAPIView):
     permission_classes=[IsAuthenticated]
     queryset=Likes.objects.all()
     serializer_class=LikesSerializer
     def perform_create(self,serializer):
 	    serializer.save(liked_by=self.request.user,liked_by_name=self.request.user.username)
+"""
+class LikesCreateAPIView(ListAPIView):#to like a post
+    permission_classes=[IsAuthenticated]
+    queryset=Likes.objects.all()
+    serializer_class=LikesSerializer
 
+    def post(self,request,*args,**kwargs):
+        data=request.data
+        post=int(data['liked_post'])#getting the id of the post
+        y=Posts.objects.get(id=post)
+        user=self.request.user
+        user_name=self.request.user.username
+        pre_exists=Likes.objects.all().filter(liked_post=post).filter(liked_by=user)#checking wether the like exists
+        if pre_exists.exists():
+            return Response('already liked')
+        else:
+            t=datetime.datetime.now()
+            Likes.objects.create(liked_by=user,liked_by_name=user_name,liked_post=y,date=t)
+            return Response('Liked post '+str(y))
 
-class LikesAPIView(ListAPIView):
+class LikesAPIView(ListAPIView):#likes on each post
 	permission_classes=[IsAuthenticated]
 	serializer_class=LikesSerializer
 	queryset=Likes.objects.all()
@@ -232,8 +248,8 @@ class LikesAPIView(ListAPIView):
 		data=request.data
 		user=self.request.user.id
 		post=int(data['liked_post'])
-		x=Likes.objects.all().filter(liked_post=post)
-		count=x.count()
+		x=Likes.objects.all().filter(liked_post=post)#getting likes of a post
+		count=x.count()#counting no of likes
 		likedby_details=[]
 		#main_dic={}
 		#n=1
@@ -250,29 +266,10 @@ class LikesAPIView(ListAPIView):
 		return Response({"likes_count":count,"details":likedby_details})
 
         
-class CommentsAPIView(ListAPIView):
+class CommentsAPIView(ListAPIView):#to view all comments on a post
     permission_classes=[IsAuthenticated]
     serializer_class=CommentsSerializer
     queryset=Posts.objects.all()
-
-class LikesCreateAPIView(ListAPIView):
-    permission_classes=[IsAuthenticated]
-    queryset=Likes.objects.all()
-    serializer_class=LikesSerializer
-
-    def post(self,request,*args,**kwargs):
-        data=request.data
-        post=int(data['liked_post'])
-        y=Posts.objects.get(id=post)
-        user=self.request.user
-        user_name=self.request.user.username
-        pre_exists=Likes.objects.all().filter(liked_post=post).filter(liked_by=user)
-        if pre_exists.exists():
-            return Response('already liked')
-        else:
-            t=datetime.datetime.now()
-            Likes.objects.create(liked_by=user,liked_by_name=user_name,liked_post=y,date=t)
-            return Response('Liked post '+str(y))
 """
 class LikesOnOwnPostAPIView(ListAPIView):
     permission_classes=[IsAuthenticated]
@@ -282,15 +279,15 @@ class LikesOnOwnPostAPIView(ListAPIView):
         queryset=Posts.objects.all().filter(username=user).filter(id__)
         return queryset
 """
-class LikesOnLikedPostAPIView(ListAPIView):
+class LikesOnLikedPostAPIView(ListAPIView):#notifications.likes on liked post
     permission_classes=[IsAuthenticated]
     serializer_class=LikedSerializer
     def get_queryset(self,*args,**kwargs):
         user = self.request.user
-        queryset=Likes.objects.all().filter(liked_by=user).order_by('-date')
+        queryset=Likes.objects.all().filter(liked_by=user).order_by('-date')#filtering each post and arranging them by date
         return queryset
 
-class CommentsOnCommentedPostAPIView(ListAPIView):
+class CommentsOnCommentedPostAPIView(ListAPIView):#notifications.comments on commented post
     permission_classes=[IsAuthenticated]
     serializer_class=CommentedSerializer
     def get_queryset(self,*args,**kwargs):
@@ -298,13 +295,13 @@ class CommentsOnCommentedPostAPIView(ListAPIView):
         queryset=Comments.objects.all().filter(commenter_id=user).order_by('-date')
         return queryset
 
-class LikesOnOwnPostAPIView(ListAPIView):
+class LikesOnOwnPostAPIView(ListAPIView):#likes on own post
     permission_classes=[IsAuthenticated]
     serializer_class=OwnPostsSerializer
     def get_queryset(self,*args,**kwargs):
         user = self.request.user
-        posts=Posts.objects.all().filter(username=user)
-        queryset=Likes.objects.all().filter(liked_post__id__in=[e.id for e in posts]).order_by('-date')
+        posts=Posts.objects.all().filter(username=user)#posts of a requested user
+        queryset=Likes.objects.all().filter(liked_post__id__in=[e.id for e in posts]).order_by('-date')#filtering and checking the likes on the post
         return queryset
 
 class CommentsOnOwnPostAPIView(ListAPIView):
@@ -312,6 +309,6 @@ class CommentsOnOwnPostAPIView(ListAPIView):
     serializer_class=CommentsOnOwnPostsSerializer
     def get_queryset(self,*args,**kwargs):
         user = self.request.user
-        posts=Posts.objects.all().filter(username=user)
-        queryset=Comments.objects.all().filter(post__id__in=[e.id for e in posts]).order_by('-date')
+        posts=Posts.objects.all().filter(username=user)#posts of a requested user
+        queryset=Comments.objects.all().filter(post__id__in=[e.id for e in posts]).order_by('-date')#filtering and checking the comments on the post
         return queryset

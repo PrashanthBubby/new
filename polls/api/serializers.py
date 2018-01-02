@@ -3,19 +3,19 @@ from django.template.loader import render_to_string
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from polls.models import Posts,Onetimelinks,UserProfile,Requests,Comments,Likes
+from polls.models import Posts,Onetimelinks,UserProfile,Requests,Comments,Likes #models
 from django.db.models import Q
 from rest_framework.fields import CurrentUserDefault
 
 User=get_user_model()
 
-class UserDetailSerializer(serializers.ModelSerializer):
+class UserDetailSerializer(serializers.ModelSerializer):#User details
     class Meta:
         model=UserProfile
         fields=('first_name','last_name','image')
     
 class PostSerializer(serializers.ModelSerializer):
-    user_details=UserDetailSerializer(source='get_user_details',required=True,many=True)
+    user_details=UserDetailSerializer(source='get_user_details',required=True,many=True)#nesting serializer
     class Meta:
         model=Posts
         fields=[
@@ -108,30 +108,30 @@ class EmailSerializer(serializers.ModelSerializer):
         fields=[
             'email'
             ]
-    def validate(self,data):
+    def validate(self,data):#validating the data
         user_obj=None
         email=data.get("email",None)
-        user=User.objects.filter(Q(email=email))
-        if user.exists() and user.count()==1:
+        user=User.objects.filter(Q(email=email))#getting the details of the email
+        if user.exists() and user.count()==1:#if the email exists
             for user in user:
                 user= user
-                t=ceil(time())
-                Onetimelinks.objects.filter(code=user.pk).delete()
-                u=Onetimelinks(code=user.pk,token=t)
+                t=ceil(time())#timestsmp
+                Onetimelinks.objects.filter(code=user.pk).delete()#if any email verifications are pending then the records will be deleted
+                u=Onetimelinks(code=user.pk,token=t)#saving present details
                 u.save()
-                t=str(t).encode()
-                subject='Reset link for password'
-                message = render_to_string('polls/password_resetlink_generation.html', {
+                t=str(t).encode()#converting to byte
+                subject='Reset link for password'#subject of a mail
+                message = render_to_string('polls/password_resetlink_generation.html', {#joins the below contet asa a string 
                     'user': user,
-                    'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token':urlsafe_base64_encode(force_bytes(t)),
+                    'uid':urlsafe_base64_encode(force_bytes(user.pk)),#encoding
+                    'token':urlsafe_base64_encode(force_bytes(t)),#encoding
                     })
                     
                 from_mail=settings.EMAIL_HOST_USER
                 to_mail=[email]
-                send_mail(subject,message,from_mail,to_mail,fail_silently=False)
+                send_mail(subject,message,from_mail,to_mail,fail_silently=False)#sending mail
         else:
-            raise serializers.ValidationError("Email is not registered or not valid")
+            raise serializers.ValidationError("Email is not registered or not valid")#if the email is not found returns error
         return data
 class EmailInviteSerializer(serializers.ModelSerializer):
     email=serializers.EmailField(label='Email Address',required=True)
