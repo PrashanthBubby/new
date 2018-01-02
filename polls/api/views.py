@@ -86,7 +86,7 @@ class ProfileUpdateAPIView(RetrieveUpdateAPIView):
         queryset=UserProfile.objects.filter(name=user)
         return queryset
 
-#this is nit used from gere(
+#the below class is not used from (
 class ProfileEditAPIView(UpdateAPIView):
     serializer_class=ProfileSerializer
     def get_queryset(self):
